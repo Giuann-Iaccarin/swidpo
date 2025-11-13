@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { ShoppingBag, Gem, Package, BookOpen, Crown, Search } from 'lucide-react';
 
 // ShopPage.jsx - Pagina Shop Completa
 const ShopPage = () => {
@@ -8,11 +9,11 @@ const ShopPage = () => {
     const [sortBy, setSortBy] = useState('popular');
 
     const categories = [
-        { id: 'all', name: 'Tutti i prodotti', icon: '🛍️' },
-        { id: 'digital', name: 'Contenuti digitali', icon: '💎' },
-        { id: 'physical', name: 'Prodotti fisici', icon: '📦' },
-        { id: 'courses', name: 'Corsi & Guide', icon: '📚' },
-        { id: 'membership', name: 'Abbonamenti', icon: '👑' }
+        { id: 'all', name: 'Tutti i prodotti', icon: ShoppingBag },
+        { id: 'digital', name: 'Contenuti digitali', icon: Gem },
+        { id: 'physical', name: 'Prodotti fisici', icon: Package },
+        { id: 'courses', name: 'Corsi & Guide', icon: BookOpen },
+        { id: 'membership', name: 'Abbonamenti', icon: Crown }
     ];
 
     const products = [
@@ -439,28 +440,31 @@ const ShopPage = () => {
                     {/* Sidebar */}
                     <aside style={sidebarStyle}>
                         <h3 style={sidebarTitleStyle}>Categorie</h3>
-                        {categories.map((cat) => (
-                            <button
-                                key={cat.id}
-                                onClick={() => setSelectedCategory(cat.id)}
-                                style={categoryButtonStyle(selectedCategory === cat.id)}
-                                onMouseEnter={(e) => {
-                                    if (selectedCategory !== cat.id) {
-                                        e.currentTarget.style.background = 'rgba(233, 30, 99, 0.1)';
-                                        e.currentTarget.style.borderColor = '#E91E63';
-                                    }
-                                }}
-                                onMouseLeave={(e) => {
-                                    if (selectedCategory !== cat.id) {
-                                        e.currentTarget.style.background = 'transparent';
-                                        e.currentTarget.style.borderColor = 'transparent';
-                                    }
-                                }}
-                            >
-                                <span style={{ fontSize: '1.25rem' }}>{cat.icon}</span>
-                                {cat.name}
-                            </button>
-                        ))}
+                        {categories.map((cat) => {
+                            const IconComponent = cat.icon;
+                            return (
+                                <button
+                                    key={cat.id}
+                                    onClick={() => setSelectedCategory(cat.id)}
+                                    style={categoryButtonStyle(selectedCategory === cat.id)}
+                                    onMouseEnter={(e) => {
+                                        if (selectedCategory !== cat.id) {
+                                            e.currentTarget.style.background = 'rgba(233, 30, 99, 0.1)';
+                                            e.currentTarget.style.borderColor = '#E91E63';
+                                        }
+                                    }}
+                                    onMouseLeave={(e) => {
+                                        if (selectedCategory !== cat.id) {
+                                            e.currentTarget.style.background = 'transparent';
+                                            e.currentTarget.style.borderColor = 'transparent';
+                                        }
+                                    }}
+                                >
+                                    <IconComponent size={20} />
+                                    {cat.name}
+                                </button>
+                            );
+                        })}
 
                         {/* Price Filter */}
                         <div style={filterSectionStyle}>
@@ -543,7 +547,7 @@ const ShopPage = () => {
 
                         {filteredProducts.length === 0 && (
                             <div style={{ textAlign: 'center', padding: '4rem', color: '#7A7A8A' }}>
-                                <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>🔍</div>
+                                <Search size={48} style={{ margin: '0 auto 1rem', opacity: 0.5 }} />
                                 <p>Nessun prodotto trovato con i filtri selezionati</p>
                             </div>
                         )}
@@ -553,17 +557,7 @@ const ShopPage = () => {
 
             {/* Floating Cart */}
             {cart.length > 0 && (
-                <div
-                    style={cartFloatingStyle}
-                    onMouseEnter={(e) => {
-                        e.currentTarget.style.transform = 'scale(1.1)';
-                        e.currentTarget.style.boxShadow = '0 12px 48px rgba(233, 30, 99, 0.8)';
-                    }}
-                    onMouseLeave={(e) => {
-                        e.currentTarget.style.transform = 'scale(1)';
-                        e.currentTarget.style.boxShadow = '0 8px 32px rgba(233, 30, 99, 0.6)';
-                    }}
-                >
+                <div style={cartFloatingStyle}>
                     <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2">
                         <circle cx="9" cy="21" r="1" />
                         <circle cx="20" cy="21" r="1" />

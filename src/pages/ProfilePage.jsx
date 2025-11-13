@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { MapPin, Calendar, Link as LinkIcon, Edit2, Share2, Crown } from 'lucide-react';
 
 // ProfilePage.jsx - Pagina Profilo Completa
 const ProfilePage = () => {
@@ -286,7 +287,9 @@ const ProfilePage = () => {
                     <div style={avatarWrapperStyle}>
                         <img src={user.avatar} alt={user.name} style={avatarStyle} />
                         {user.isPremium && (
-                            <div style={badgeStyle}>👑</div>
+                            <div style={badgeStyle}>
+                                <Crown size={24} color="#0A0A0F" />
+                            </div>
                         )}
                     </div>
 
@@ -297,26 +300,15 @@ const ProfilePage = () => {
 
                         <div style={metaStyle}>
                             <div style={metaItemStyle}>
-                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
-                                    <circle cx="12" cy="10" r="3" />
-                                </svg>
+                                <MapPin size={16} />
                                 {user.location}
                             </div>
                             <div style={metaItemStyle}>
-                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
-                                    <line x1="16" y1="2" x2="16" y2="6" />
-                                    <line x1="8" y1="2" x2="8" y2="6" />
-                                    <line x1="3" y1="10" x2="21" y2="10" />
-                                </svg>
+                                <Calendar size={16} />
                                 Membro dal {new Date(user.memberSince).toLocaleDateString('it-IT')}
                             </div>
                             <div style={metaItemStyle}>
-                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                                    <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" />
-                                    <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" />
-                                </svg>
+                                <LinkIcon size={16} />
                                 {user.website}
                             </div>
                         </div>
@@ -354,6 +346,7 @@ const ProfilePage = () => {
                                 e.currentTarget.style.boxShadow = 'none';
                             }}
                         >
+                            <Edit2 size={16} />
                             Modifica profilo
                         </button>
                         <button
@@ -367,6 +360,7 @@ const ProfilePage = () => {
                                 e.currentTarget.style.background = 'transparent';
                             }}
                         >
+                            <Share2 size={16} />
                             Condividi profilo
                         </button>
                     </div>

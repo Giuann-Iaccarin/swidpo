@@ -22,12 +22,6 @@ function Navigation() {
                         <Link to="/shop" className="nav-link">Shop</Link>
                     </li>
                     <li className="nav-item">
-                        <Link to="/about" className="nav-link">About</Link>
-                    </li>
-                    <li className="nav-item">
-                        <Link to="/contact" className="nav-link">Contact</Link>
-                    </li>
-                    <li className="nav-item">
                         <Link to="/profile" className="nav-link profile-link">Profile</Link>
                     </li>
                 </ul>

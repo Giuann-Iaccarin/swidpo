@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Flame, Sparkles, TrendingUp, Crown, Star } from 'lucide-react';
 
 // HomePage.jsx - Pagina Principale Completa
 const HomePage = () => {
@@ -123,11 +124,11 @@ const HomePage = () => {
     ];
 
     const categories = [
-        { id: 'all', name: 'Tutti', icon: '🎬', count: 12543 },
-        { id: 'trending', name: 'Tendenze', icon: '🔥', count: 892 },
-        { id: 'new', name: 'Novità', icon: '✨', count: 234 },
-        { id: 'vip', name: 'VIP Exclusive', icon: '👑', count: 456 },
-        { id: 'popular', name: 'Popolari', icon: '⭐', count: 1234 }
+        { id: 'all', name: 'Tutti', icon: Flame, count: 12543 },
+        { id: 'trending', name: 'Tendenze', icon: Flame, count: 892 },
+        { id: 'new', name: 'Novità', icon: Sparkles, count: 234 },
+        { id: 'vip', name: 'VIP Exclusive', icon: Crown, count: 456 },
+        { id: 'popular', name: 'Popolari', icon: Star, count: 1234 }
     ];
 
     const pageStyle = {
@@ -416,56 +417,52 @@ const HomePage = () => {
                     paddingBottom: '0.5rem',
                     marginBottom: '2rem'
                 }}>
-                    {categories.map((cat) => (
-                        <button
-                            key={cat.id}
-                            onClick={() => setSelectedCategory(cat.id)}
-                            style={{
-                                padding: '1rem 1.5rem',
-                                background: selectedCategory === cat.id ? 'linear-gradient(135deg, #E91E63 0%, #9C27B0 100%)' : 'rgba(255, 255, 255, 0.05)',
-                                border: selectedCategory === cat.id ? 'none' : '2px solid rgba(255, 255, 255, 0.08)',
-                                borderRadius: '0.75rem',
-                                color: '#FFFFFF',
-                                fontSize: '0.875rem',
-                                fontWeight: selectedCategory === cat.id ? 600 : 500,
-                                cursor: 'pointer',
-                                transition: 'all 0.3s ease',
-                                whiteSpace: 'nowrap',
-                                display: 'flex',
-                                alignItems: 'center',
-                                gap: '0.5rem',
-                                boxShadow: selectedCategory === cat.id ? '0 4px 16px rgba(233, 30, 99, 0.4)' : 'none'
-                            }}
-                        >
-                            <span style={{ fontSize: '1.25rem' }}>{cat.icon}</span>
-                            {cat.name}
-                            <span style={{
-                                padding: '0.125rem 0.5rem',
-                                background: 'rgba(255, 255, 255, 0.1)',
-                                borderRadius: '0.25rem',
-                                fontSize: '0.625rem',
-                                marginLeft: '0.25rem'
-                            }}>
-                                {cat.count}
-                            </span>
-                        </button>
-                    ))}
+                    {categories.map((cat) => {
+                        const IconComponent = cat.icon;
+                        return (
+                            <button
+                                key={cat.id}
+                                onClick={() => setSelectedCategory(cat.id)}
+                                style={{
+                                    padding: '1rem 1.5rem',
+                                    background: selectedCategory === cat.id ? 'linear-gradient(135deg, #E91E63 0%, #9C27B0 100%)' : 'rgba(255, 255, 255, 0.05)',
+                                    border: selectedCategory === cat.id ? 'none' : '2px solid rgba(255, 255, 255, 0.08)',
+                                    borderRadius: '0.75rem',
+                                    color: '#FFFFFF',
+                                    fontSize: '0.875rem',
+                                    fontWeight: selectedCategory === cat.id ? 600 : 500,
+                                    cursor: 'pointer',
+                                    transition: 'all 0.3s ease',
+                                    whiteSpace: 'nowrap',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    gap: '0.5rem',
+                                    boxShadow: selectedCategory === cat.id ? '0 4px 16px rgba(233, 30, 99, 0.4)' : 'none'
+                                }}
+                            >
+                                <IconComponent size={18} />
+                                {cat.name}
+                                <span style={{
+                                    padding: '0.125rem 0.5rem',
+                                    background: 'rgba(255, 255, 255, 0.1)',
+                                    borderRadius: '0.25rem',
+                                    fontSize: '0.625rem',
+                                    marginLeft: '0.25rem'
+                                }}>
+                                    {cat.count}
+                                </span>
+                            </button>
+                        );
+                    })}
                 </div>
 
                 {/* Trending Videos */}
                 <div style={sectionHeaderStyle}>
-                    <h2 style={sectionTitleStyle}>🔥 Video in Tendenza</h2>
-                    <button
-                        style={viewAllButtonStyle}
-                        onMouseEnter={(e) => {
-                            e.currentTarget.style.borderColor = '#E91E63';
-                            e.currentTarget.style.background = 'rgba(233, 30, 99, 0.1)';
-                        }}
-                        onMouseLeave={(e) => {
-                            e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.1)';
-                            e.currentTarget.style.background = 'transparent';
-                        }}
-                    >
+                    <h2 style={sectionTitleStyle}>
+                        <Flame size={24} style={{ marginRight: '0.5rem' }} />
+                        Video in Tendenza
+                    </h2>
+                    <button style={viewAllButtonStyle}>
                         Vedi tutti →
                     </button>
                 </div>
@@ -480,7 +477,10 @@ const HomePage = () => {
             {/* Featured Creators */}
             <div style={{ ...sectionStyle, background: 'rgba(26, 26, 40, 0.2)' }}>
                 <div style={sectionHeaderStyle}>
-                    <h2 style={sectionTitleStyle}>⭐ Creatori in Evidenza</h2>
+                    <h2 style={sectionTitleStyle}>
+                        <Star size={24} style={{ marginRight: '0.5rem' }} />
+                        Creatori in Evidenza
+                    </h2>
                     <button style={viewAllButtonStyle}>Scopri tutti →</button>
                 </div>
 
@@ -565,7 +565,10 @@ const HomePage = () => {
             {/* CTA Banner */}
             <div style={sectionStyle}>
                 <div style={ctaBannerStyle}>
-                    <h2 style={ctaTitleStyle}>Diventa membro VIP oggi</h2>
+                    <h2 style={ctaTitleStyle}>
+                        <Crown size={32} style={{ marginRight: '0.5rem', display: 'inline' }} />
+                        Diventa membro VIP oggi
+                    </h2>
                     <p style={{ fontSize: '1.25rem', color: '#B8B8C8', marginBottom: '2rem', maxWidth: '600px', margin: '0 auto 2rem' }}>
                         Accedi a contenuti esclusivi, videolezioni premium e molto altro. Unisciti a oltre 100.000 membri VIP.
                     </p>

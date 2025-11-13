@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { BookOpen, Camera, Film, Briefcase, Sparkles, Palette, Clock, Zap, Users, Star, Search } from 'lucide-react';
 
 // LessonsPage.jsx - Pagina Videolezioni Completa
 const LessonsPage = () => {
@@ -9,12 +10,12 @@ const LessonsPage = () => {
     const [isPremiumUser, setIsPremiumUser] = useState(false);
 
     const categories = [
-        { id: 'all', name: 'Tutte le categorie', icon: '📚', count: 48 },
-        { id: 'photo', name: 'Fotografia', icon: '📸', count: 12 },
-        { id: 'video', name: 'Video Production', icon: '🎬', count: 8 },
-        { id: 'business', name: 'Business & Marketing', icon: '💼', count: 15 },
-        { id: 'wellness', name: 'Wellness & Lifestyle', icon: '✨', count: 7 },
-        { id: 'art', name: 'Arte & Performance', icon: '🎨', count: 6 }
+        { id: 'all', name: 'Tutte le categorie', icon: BookOpen, count: 48 },
+        { id: 'photo', name: 'Fotografia', icon: Camera, count: 12 },
+        { id: 'video', name: 'Video Production', icon: Film, count: 8 },
+        { id: 'business', name: 'Business & Marketing', icon: Briefcase, count: 15 },
+        { id: 'wellness', name: 'Wellness & Lifestyle', icon: Sparkles, count: 7 },
+        { id: 'art', name: 'Arte & Performance', icon: Palette, count: 6 }
     ];
 
     const levels = [
@@ -549,7 +550,7 @@ const LessonsPage = () => {
                         <select value={selectedCategory} onChange={(e) => setSelectedCategory(e.target.value)} style={selectStyle}>
                             {categories.map(cat => (
                                 <option key={cat.id} value={cat.id} style={{ background: '#1A1A28' }}>
-                                    {cat.icon} {cat.name} ({cat.count})
+                                    {cat.name} ({cat.count})
                                 </option>
                             ))}
                         </select>
@@ -566,15 +567,15 @@ const LessonsPage = () => {
                 {/* Tabs */}
                 <div style={tabsStyle}>
                     <button style={tabButtonStyle(true)}>
-                        <span>📚</span>
+                        <BookOpen size={18} />
                         Tutti i corsi
                     </button>
                     <button style={tabButtonStyle(false)}>
-                        <span>🎯</span>
+                        <Zap size={18} />
                         I miei corsi ({enrolledLessons.length})
                     </button>
                     <button style={tabButtonStyle(false)}>
-                        <span>⭐</span>
+                        <Star size={18} />
                         Preferiti
                     </button>
                 </div>
@@ -588,7 +589,7 @@ const LessonsPage = () => {
 
                 {filteredLessons.length === 0 && (
                     <div style={{ textAlign: 'center', padding: '4rem', color: '#7A7A8A' }}>
-                        <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>🔍</div>
+                        <Search size={48} style={{ margin: '0 auto 1rem', opacity: 0.5 }} />
                         <p>Nessun corso trovato con i filtri selezionati</p>
                     </div>
                 )}
