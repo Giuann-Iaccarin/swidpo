@@ -1,0 +1,133 @@
+.navbar {
+    background: linear-gradient(135deg, #282c34 0%, #1a1f2e 100%);
+    padding: 1rem 0;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    animation: slideInDown 0.6s ease-out;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+@keyframes slideInDown {
+    from {
+        transform: translateY(-100%);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.nav-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.nav-logo {
+    color: white;
+    font-size: 1.5rem;
+    font-weight: bold;
+    text-decoration: none;
+    animation: fadeIn 0.6s ease-out;
+    transition: all 0.3s ease;
+}
+
+.nav-logo:hover {
+    animation: glowText 2s ease-in-out infinite;
+    color: #61dafb;
+}
+
+.nav-menu {
+    display: flex;
+    list-style: none;
+    gap: 2rem;
+    margin: 0;
+    padding: 0;
+}
+
+.nav-item {
+    display: list-item;
+    animation: fadeInDown 0.6s ease-out;
+}
+
+.nav-item:nth-child(1) {
+    animation-delay: 0.1s;
+}
+
+.nav-item:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+.nav-item:nth-child(3) {
+    animation-delay: 0.3s;
+}
+
+.nav-item:nth-child(4) {
+    animation-delay: 0.4s;
+}
+
+.nav-item:nth-child(5) {
+    animation-delay: 0.5s;
+}
+
+.nav-item:nth-child(6) {
+    animation-delay: 0.6s;
+}
+
+.nav-item:nth-child(7) {
+    animation-delay: 0.7s;
+}
+
+.nav-link {
+    color: white;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    position: relative;
+    padding: 0.5rem 0;
+}
+
+.nav-link::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 2px;
+    bottom: 0;
+    left: 0;
+    background: #61dafb;
+    transition: width 0.3s ease;
+}
+
+.nav-link:hover {
+    color: #61dafb;
+    animation: pulse 1s ease-in-out infinite;
+}
+
+.nav-link:hover::after {
+    width: 100%;
+}
+
+.profile-link {
+    background: linear-gradient(135deg, #61dafb 0%, #00d4ff 100%);
+    color: #282c34;
+    padding: 0.5rem 1.5rem;
+    border-radius: 20px;
+    font-weight: bold;
+    animation: scaleIn 0.5s ease-out;
+    transition: all 0.3s ease;
+}
+
+.profile-link:hover {
+    animation: bounce 1s infinite, glow 2s ease-in-out infinite;
+    transform: scale(1.1);
+    box-shadow: 0 5px 20px rgba(97, 218, 251, 0.6);
+}
+
+.profile-link::after {
+    display: none;
+}
