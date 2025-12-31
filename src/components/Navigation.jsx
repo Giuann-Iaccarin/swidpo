@@ -39,7 +39,7 @@ function Navigation() {
                 <div className="flex items-center gap-6">
 
                     <Link
-                        to="/videos"
+                        to="/videos/1"
                         className="text-sm font-medium text-white/80 hover:text-white transition"
                     >
                         Videos
@@ -57,7 +57,7 @@ function Navigation() {
                         to="/premium"
                         className="
               flex items-center gap-1.5 rounded-full
-              bg-gradient-to-r from-pink-500 to-purple-600
+              bg-linear-to-r from-pink-500 to-purple-600
               px-3 py-1.5 text-xs font-bold text-white
               shadow-lg shadow-pink-500/30
               hover:scale-105 transition
