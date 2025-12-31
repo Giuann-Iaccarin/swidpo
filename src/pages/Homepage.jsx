@@ -1,590 +1,292 @@
-import React, { useState } from 'react';
-import { Flame, Sparkles, TrendingUp, Crown, Star } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
+import { Flame, Sparkles, Crown, Star, Heart, Play } from 'lucide-react';
 
-// HomePage.jsx - Pagina Principale Completa
 const HomePage = () => {
     const [selectedCategory, setSelectedCategory] = useState('all');
-    //const [user, setUser] = useState(null); // null = non loggato, oppure oggetto user
+    const [page, setPage] = useState(1);
+    const [hoveredId, setHoveredId] = useState(null);
+    const [allVideos, setAllVideos] = useState([]);
+    const [isAutoScroll, setIsAutoScroll] = useState(true);
+    // eslint-disable-next-line no-unused-vars
+    const [scrollPosition, setScrollPosition] = useState(0);
+    const searchScrollRef = React.useRef(null);
 
-    // Mock Data
-    const heroSlides = [
-        {
-            id: 1,
-            title: 'Benvenuto su Swidpo',
-            subtitle: 'L\'esperienza premium per adulti',
-            description: 'Scopri contenuti esclusivi, creatori di talento e un mondo di piacere',
-            image: 'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=1920&h=800&fit=crop',
-            ctaText: 'Inizia Ora',
-            ctaLink: '/register'
-        },
-        {
-            id: 2,
-            title: 'Contenuti Esclusivi VIP',
-            subtitle: 'Solo per membri premium',
-            description: 'Accedi a migliaia di video esclusivi e lezioni interattive',
-            image: 'https://images.unsplash.com/photo-1492666673288-3c4b4576ad9a?w=1920&h=800&fit=crop',
-            ctaText: 'Diventa VIP',
-            ctaLink: '/premium'
-        },
-        {
-            id: 3,
-            title: 'Shop Esclusivo',
-            subtitle: 'Prodotti premium selezionati',
-            description: 'Scopri la nostra collezione di prodotti luxury e digitali',
-            image: 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=1920&h=800&fit=crop',
-            ctaText: 'Esplora Shop',
-            ctaLink: '/shop'
-        }
-    ];
-
-    const trendingVideos = [
-        {
-            id: 1,
-            thumbnail: 'https://images.unsplash.com/photo-1485846234645-a62644f84728?w=400&h=225&fit=crop',
-            title: 'Video Esclusivo Premium',
-            creator: 'Sofia Martinez',
-            duration: '12:34',
-            views: '45.2K',
-            uploadDate: '2 giorni fa',
-            isExclusive: true,
-            category: 'Trending'
-        },
-        {
-            id: 2,
-            thumbnail: 'https://images.unsplash.com/photo-1536440136628-849c177e76a1?w=400&h=225&fit=crop',
-            title: 'Nuova Serie Sensuale',
+    // Generate videos
+    useEffect(() => {
+        const newVideos = Array.from({ length: 24 }, (_, i) => ({
+            id: `${page}-${i}`,
+            title: 'Exclusive Premium Content',
             creator: 'Luna Rose',
-            duration: '18:45',
-            views: '32.1K',
-            uploadDate: '1 giorno fa',
-            isExclusive: false,
-            category: 'Nuovi'
-        },
-        {
-            id: 3,
-            thumbnail: 'https://images.unsplash.com/photo-1516321497487-e288fb19713f?w=400&h=225&fit=crop',
-            title: 'Behind The Scenes VIP',
-            creator: 'Emma Luxe',
-            duration: '25:12',
-            views: '78.5K',
-            uploadDate: '3 giorni fa',
-            isExclusive: true,
-            category: 'VIP'
-        },
-        {
-            id: 4,
-            thumbnail: 'https://images.unsplash.com/photo-1518893063132-36e46dbe2428?w=400&h=225&fit=crop',
-            title: 'Artistic Performance',
-            creator: 'Isabella Noir',
-            duration: '15:30',
-            views: '56.8K',
-            uploadDate: '1 settimana fa',
-            isExclusive: false,
-            category: 'Arte'
-        }
-    ];
-
-    const featuredCreators = [
-        {
-            id: 1,
-            name: 'Sofia Martinez',
-            avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&h=150&fit=crop',
-            followers: '125K',
-            videos: 342,
-            isPremium: true,
-            bio: 'Content creator & model'
-        },
-        {
-            id: 2,
-            name: 'Luna Rose',
-            avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&h=150&fit=crop',
-            followers: '98K',
-            videos: 256,
-            isPremium: true,
-            bio: 'Sensual artist'
-        },
-        {
-            id: 3,
-            name: 'Emma Luxe',
-            avatar: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=150&h=150&fit=crop',
-            followers: '210K',
-            videos: 478,
-            isPremium: true,
-            bio: 'VIP exclusive'
-        },
-        {
-            id: 4,
-            name: 'Isabella Noir',
-            avatar: 'https://images.unsplash.com/photo-1488426862026-3ee34a7d66df?w=150&h=150&fit=crop',
-            followers: '156K',
-            videos: 389,
-            isPremium: true,
-            bio: 'Performance artist'
-        }
-    ];
+            views: `${Math.floor(Math.random() * 200)}K`,
+            duration: '14:32',
+            thumbnail: `https://picsum.photos/400/600?random=${page}-${i}`,
+            isExclusive: Math.random() > 0.6
+        }));
+        // eslint-disable-next-line react-hooks/set-state-in-effect
+        setAllVideos(prev => [...prev, ...newVideos]);
+    }, [page]);
 
     const categories = [
-        { id: 'all', name: 'Tutti', icon: Flame, count: 12543 },
-        { id: 'trending', name: 'Tendenze', icon: Flame, count: 892 },
-        { id: 'new', name: 'Novità', icon: Sparkles, count: 234 },
-        { id: 'vip', name: 'VIP Exclusive', icon: Crown, count: 456 },
-        { id: 'popular', name: 'Popolari', icon: Star, count: 1234 }
+        { id: 'all', name: 'All', icon: Flame, color: 'from-red-500 to-orange-600', glow: 'from-red-500 via-orange-500 to-red-500', shadow: 'shadow-red-500/50' },
+        { id: 'trending', name: 'Trending', icon: Flame, color: 'from-green-500 to-emerald-600', glow: 'from-green-500 via-emerald-500 to-green-500', shadow: 'shadow-green-500/50' },
+        { id: 'new', name: 'New', icon: Sparkles, color: 'from-cyan-500 to-blue-600', glow: 'from-cyan-500 via-blue-500 to-cyan-500', shadow: 'shadow-cyan-500/50' },
+        { id: 'vip', name: 'VIP', icon: Crown, color: 'from-yellow-500 to-amber-600', glow: 'from-yellow-500 via-amber-500 to-yellow-500', shadow: 'shadow-yellow-500/50' },
+        { id: 'popular', name: 'Popular', icon: Star, color: 'from-purple-500 to-fuchsia-600', glow: 'from-purple-500 via-fuchsia-500 to-purple-500', shadow: 'shadow-purple-500/50' }
     ];
 
-    const pageStyle = {
-        minHeight: '100vh',
-        background: '#0A0A0F',
-        paddingTop: '80px'
+    // Infinite scroll
+    useEffect(() => {
+        const onScroll = () => {
+            if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 800) {
+                setPage(p => p + 1);
+            }
+        };
+        window.addEventListener('scroll', onScroll);
+        return () => window.removeEventListener('scroll', onScroll);
+    }, []);
+
+    // Auto-scroll for quick searches
+    useEffect(() => {
+        if (!isAutoScroll) return;
+
+        const interval = setInterval(() => {
+            if (searchScrollRef.current) {
+                const container = searchScrollRef.current;
+                const maxScroll = container.scrollWidth - container.clientWidth;
+
+                if (container.scrollLeft >= maxScroll) {
+                    container.scrollLeft = 0;
+                    setScrollPosition(0);
+                } else {
+                    container.scrollLeft += 1;
+                    setScrollPosition(container.scrollLeft);
+                }
+            }
+        }, 30);
+
+        return () => clearInterval(interval);
+    }, [isAutoScroll]);
+
+    const handleManualScroll = (direction) => {
+        setIsAutoScroll(false);
+        const container = searchScrollRef.current;
+        if (!container) return;
+
+        const scrollAmount = 300;
+        if (direction === 'left') {
+            container.scrollLeft = Math.max(0, container.scrollLeft - scrollAmount);
+        } else {
+            container.scrollLeft = Math.min(container.scrollWidth - container.clientWidth, container.scrollLeft + scrollAmount);
+        }
+        setScrollPosition(container.scrollLeft);
     };
 
-    const sectionStyle = {
-        maxWidth: '1400px',
-        margin: '0 auto',
-        padding: '3rem 2rem'
+    const handleSearchInteraction = () => {
+        setIsAutoScroll(false);
     };
 
-    const sectionHeaderStyle = {
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        marginBottom: '2rem'
-    };
+    const VideoCard = ({ video }) => {
+        const isHovered = hoveredId === video.id;
 
-    const sectionTitleStyle = {
-        fontSize: '2rem',
-        fontWeight: 700,
-        color: '#FFFFFF',
-        fontFamily: '"Playfair Display", serif'
-    };
-
-    const viewAllButtonStyle = {
-        padding: '0.75rem 1.5rem',
-        background: 'transparent',
-        border: '2px solid rgba(255, 255, 255, 0.1)',
-        borderRadius: '0.75rem',
-        color: '#E91E63',
-        fontSize: '0.875rem',
-        fontWeight: 600,
-        cursor: 'pointer',
-        transition: 'all 0.3s ease',
-        fontFamily: '"Inter", sans-serif'
-    };
-
-    const gridStyle = {
-        display: 'grid',
-        gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
-        gap: '2rem'
-    };
-
-    const creatorCardStyle = {
-        background: 'rgba(26, 26, 40, 0.4)',
-        borderRadius: '1rem',
-        padding: '2rem',
-        textAlign: 'center',
-        border: '1px solid rgba(255, 255, 255, 0.06)',
-        transition: 'all 0.3s ease',
-        cursor: 'pointer'
-    };
-
-    const avatarStyle = {
-        width: '120px',
-        height: '120px',
-        borderRadius: '50%',
-        margin: '0 auto 1rem',
-        border: '4px solid transparent',
-        backgroundImage: 'linear-gradient(#1A1A28, #1A1A28), linear-gradient(135deg, #E91E63 0%, #9C27B0 100%)',
-        backgroundOrigin: 'border-box',
-        backgroundClip: 'padding-box, border-box',
-        objectFit: 'cover'
-    };
-
-    const statsContainerStyle = {
-        display: 'grid',
-        gridTemplateColumns: 'repeat(2, 1fr)',
-        gap: '1rem',
-        marginTop: '1.5rem'
-    };
-
-    const statStyle = {
-        textAlign: 'center'
-    };
-
-    const statValueStyle = {
-        fontSize: '1.5rem',
-        fontWeight: 700,
-        color: '#E91E63',
-        fontFamily: '"Inter", sans-serif'
-    };
-
-    const statLabelStyle = {
-        fontSize: '0.75rem',
-        color: '#7A7A8A',
-        textTransform: 'uppercase',
-        marginTop: '0.25rem',
-        fontFamily: '"Inter", sans-serif'
-    };
-
-    const ctaBannerStyle = {
-        background: 'linear-gradient(135deg, rgba(233, 30, 99, 0.2) 0%, rgba(156, 39, 176, 0.2) 100%)',
-        borderRadius: '1.5rem',
-        padding: '4rem 2rem',
-        textAlign: 'center',
-        border: '1px solid rgba(233, 30, 99, 0.3)',
-        marginTop: '3rem',
-        position: 'relative',
-        overflow: 'hidden'
-    };
-
-    const ctaTitleStyle = {
-        fontSize: '2.5rem',
-        fontWeight: 900,
-        background: 'linear-gradient(135deg, #FFFFFF 0%, #E91E63 100%)',
-        WebkitBackgroundClip: 'text',
-        WebkitTextFillColor: 'transparent',
-        backgroundClip: 'text',
-        marginBottom: '1rem',
-        fontFamily: '"Playfair Display", serif'
-    };
-
-    const ctaButtonStyle = {
-        padding: '1.25rem 3rem',
-        background: 'linear-gradient(135deg, #E91E63 0%, #9C27B0 100%)',
-        color: '#FFFFFF',
-        border: 'none',
-        borderRadius: '3rem',
-        fontSize: '1.125rem',
-        fontWeight: 700,
-        cursor: 'pointer',
-        transition: 'all 0.3s ease',
-        boxShadow: '0 8px 32px rgba(233, 30, 99, 0.4)',
-        fontFamily: '"Inter", sans-serif',
-        marginTop: '1.5rem'
-    };
-
-    // Placeholder per VideoCard component
-    const VideoCardPlaceholder = ({ video }) => (
-        <div
-            style={{
-                background: 'rgba(26, 26, 40, 0.4)',
-                borderRadius: '1rem',
-                overflow: 'hidden',
-                border: '1px solid rgba(255, 255, 255, 0.06)',
-                transition: 'all 0.3s ease',
-                cursor: 'pointer'
-            }}
-            onMouseEnter={(e) => {
-                e.currentTarget.style.transform = 'translateY(-8px)';
-                e.currentTarget.style.boxShadow = '0 12px 40px rgba(233, 30, 99, 0.3)';
-            }}
-            onMouseLeave={(e) => {
-                e.currentTarget.style.transform = 'translateY(0)';
-                e.currentTarget.style.boxShadow = 'none';
-            }}
-        >
-            <div style={{ position: 'relative', paddingBottom: '56.25%', background: '#1A1A28' }}>
+        return (
+            <div
+                className="relative overflow-hidden rounded-xl bg-zinc-900 cursor-pointer transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-pink-500/20"
+                onMouseEnter={() => setHoveredId(video.id)}
+                onMouseLeave={() => setHoveredId(null)}
+                style={{ aspectRatio: '2/3' }}
+            >
+                {/* Image */}
                 <img
                     src={video.thumbnail}
                     alt={video.title}
-                    style={{ position: 'absolute', width: '100%', height: '100%', objectFit: 'cover' }}
+                    className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                    style={{ transform: isHovered ? 'scale(1.1)' : 'scale(1)' }}
                 />
-                <div style={{
-                    position: 'absolute',
-                    bottom: '0.75rem',
-                    right: '0.75rem',
-                    padding: '0.25rem 0.5rem',
-                    background: 'rgba(10, 10, 15, 0.9)',
-                    borderRadius: '0.25rem',
-                    fontSize: '0.75rem',
-                    color: '#FFFFFF'
-                }}>
-                    {video.duration}
-                </div>
+
+                {/* Gradient Overlay - always visible at bottom */}
+                <div className="absolute inset-0 bg-linear-to-t from-black/90 via-transparent to-transparent" />
+
+                {/* Enhanced overlay on hover */}
+                <div
+                    className="absolute inset-0 bg-black/40 transition-opacity duration-300"
+                    style={{ opacity: isHovered ? 1 : 0 }}
+                />
+
+                {/* VIP Badge */}
                 {video.isExclusive && (
-                    <div style={{
-                        position: 'absolute',
-                        top: '0.75rem',
-                        left: '0.75rem',
-                        padding: '0.25rem 0.75rem',
-                        background: 'linear-gradient(135deg, #FFD700 0%, #FFA500 100%)',
-                        borderRadius: '0.5rem',
-                        fontSize: '0.625rem',
-                        fontWeight: 700,
-                        color: '#0A0A0F',
-                        textTransform: 'uppercase'
-                    }}>
+                    <div className="absolute top-2 left-2 flex items-center gap-1 px-2 py-1 bg-linear-to-r from-pink-500 to-purple-600 rounded-md text-xs font-bold">
+                        <Crown className="w-3 h-3" />
                         VIP
                     </div>
                 )}
-            </div>
-            <div style={{ padding: '1.25rem' }}>
-                <h3 style={{
-                    fontSize: '1rem',
-                    fontWeight: 600,
-                    color: '#FFFFFF',
-                    marginBottom: '0.5rem',
-                    overflow: 'hidden',
-                    textOverflow: 'ellipsis',
-                    whiteSpace: 'nowrap'
-                }}>
-                    {video.title}
-                </h3>
-                <div style={{ fontSize: '0.875rem', color: '#B8B8C8', marginBottom: '0.5rem' }}>
-                    {video.creator}
+
+                {/* Duration */}
+                <div className="absolute top-2 right-2 px-2 py-1 bg-black/70 backdrop-blur-sm rounded text-xs font-semibold">
+                    {video.duration}
                 </div>
-                <div style={{ display: 'flex', gap: '0.75rem', fontSize: '0.75rem', color: '#7A7A8A' }}>
-                    <span>{video.views} visualizzazioni</span>
-                    <span>•</span>
-                    <span>{video.uploadDate}</span>
+
+                {/* Play Button */}
+                <div
+                    className="absolute inset-0 flex items-center justify-center transition-opacity duration-300"
+                    style={{ opacity: isHovered ? 1 : 0 }}
+                >
+                    <div className="w-14 h-14 flex items-center justify-center bg-linear-to-r from-pink-500 to-purple-600 rounded-full shadow-lg">
+                        <Play className="w-6 h-6 ml-1" fill="white" />
+                    </div>
+                </div>
+
+                {/* Bottom Info */}
+                <div className="absolute bottom-0 left-0 right-0 p-3">
+                    <h3 className="text-sm font-bold mb-1 line-clamp-2">
+                        {video.title}
+                    </h3>
+                    <div className="flex items-center justify-between text-xs text-gray-300 mb-2">
+                        <span>{video.creator}</span>
+                        <span className="flex items-center gap-1">
+                            <Heart className="w-3 h-3" />
+                            {video.views}
+                        </span>
+                    </div>
+
+                    {/* Buttons - only on hover */}
+                    <div
+                        className="flex gap-2 transition-all duration-300"
+                        style={{
+                            opacity: isHovered ? 1 : 0,
+                            transform: isHovered ? 'translateY(0)' : 'translateY(8px)'
+                        }}
+                    >
+                        <button className="flex-1 px-3 py-1.5 bg-linear-to-r from-pink-500 to-purple-600 rounded text-xs font-bold">
+                            Watch
+                        </button>
+                        <button className="px-2.5 py-1.5 bg-white/10 backdrop-blur-sm rounded">
+                            <Heart className="w-3.5 h-3.5" />
+                        </button>
+                    </div>
                 </div>
             </div>
-        </div>
-    );
+        );
+    };
 
     return (
-        <div style={pageStyle}>
-            {/* Hero Section con Slider */}
-            <div style={{ position: 'relative', width: '100%', height: '80vh', minHeight: '600px', overflow: 'hidden' }}>
-                <img
-                    src={heroSlides[0].image}
-                    alt={heroSlides[0].title}
-                    style={{ width: '100%', height: '100%', objectFit: 'cover', position: 'absolute' }}
-                />
-                <div style={{
-                    position: 'absolute',
-                    top: 0,
-                    left: 0,
-                    right: 0,
-                    bottom: 0,
-                    background: 'linear-gradient(135deg, rgba(10,10,15,0.95) 0%, rgba(233,30,99,0.2) 100%)'
-                }} />
-                <div style={{
-                    position: 'absolute',
-                    top: '50%',
-                    left: '50%',
-                    transform: 'translate(-50%, -50%)',
-                    textAlign: 'center',
-                    maxWidth: '800px',
-                    padding: '0 2rem',
-                    width: '100%'
-                }}>
-                    <div style={{
-                        fontSize: '1rem',
-                        fontWeight: 600,
-                        color: '#E91E63',
-                        textTransform: 'uppercase',
-                        letterSpacing: '0.15em',
-                        marginBottom: '1rem'
-                    }}>
-                        {heroSlides[0].subtitle}
+        <div className="min-h-screen bg-zinc-950 text-white">
+            {/* Animated Background */}
+            <div className="fixed inset-0 overflow-hidden pointer-events-none opacity-50">
+                <div className="absolute top-20 left-10 w-96 h-96 bg-pink-500/20 rounded-full blur-3xl animate-pulse" />
+                <div className="absolute bottom-20 right-10 w-96 h-96 bg-purple-500/20 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }} />
+            </div>
+
+            {/* Category Bar */}
+            <div className="sticky pt-20 top-0 z-30 bg-zinc-950/95 backdrop-blur-2xl border-b border-zinc-800/50 shadow-xl shadow-black/20">
+                <div className="relative px-4 py-4 overflow-x-auto">
+                    {/* Glassmorphic container */}
+                    <div className="flex gap-3 w-max mx-auto">
+                        {categories.map((cat) => {
+                            const Icon = cat.icon;
+                            const isActive = selectedCategory === cat.id;
+
+                            return (
+                                <button
+                                    key={cat.id}
+                                    onClick={() => setSelectedCategory(cat.id)}
+                                    className="relative group"
+                                >
+                                    {/* Animated glow effect */}
+                                    {isActive && (
+                                        <div className={`absolute -inset-1 bg-linear-to-r ${cat.glow} rounded-2xl blur-lg opacity-75 animate-pulse`} />
+                                    )}
+
+                                    {/* Button */}
+                                    <div className={`relative flex items-center gap-2 px-6 py-3 rounded-2xl text-sm font-bold whitespace-nowrap transition-all duration-300 ${isActive
+                                        ? `bg-linear-to-r ${cat.color} text-white scale-105 ${cat.shadow} shadow-lg`
+                                        : 'bg-white/5 text-gray-400 hover:bg-white/10 hover:text-white hover:scale-105'
+                                        }`}>
+                                        <Icon className={`w-4 h-4 transition-transform duration-300 ${isActive ? 'rotate-12' : 'group-hover:rotate-12'}`} />
+                                        <span>{cat.name}</span>
+
+                                        {/* Active indicator */}
+                                        {isActive && (
+                                            <div className="absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-8 h-0.5 bg-white rounded-full" />
+                                        )}
+                                    </div>
+                                </button>
+                            );
+                        })}
                     </div>
-                    <h1 style={{
-                        fontSize: '4rem',
-                        fontWeight: 900,
-                        fontFamily: '"Playfair Display", serif',
-                        background: 'linear-gradient(135deg, #FFFFFF 0%, #E91E63 100%)',
-                        WebkitBackgroundClip: 'text',
-                        WebkitTextFillColor: 'transparent',
-                        marginBottom: '1.5rem',
-                        lineHeight: 1.2
-                    }}>
-                        {heroSlides[0].title}
-                    </h1>
-                    <p style={{ fontSize: '1.25rem', color: '#B8B8C8', marginBottom: '2.5rem', lineHeight: 1.6 }}>
-                        {heroSlides[0].description}
-                    </p>
+
+                    {/* Gradient fades for scroll indication */}
+                    <div className="absolute left-0 top-0 bottom-0 w-12 bg-linear-to-r from-zinc-950 to-transparent pointer-events-none" />
+                    <div className="absolute right-0 top-0 bottom-0 w-12 bg-linear-to-l from-zinc-950 to-transparent pointer-events-none" />
+                </div>
+            </div>
+
+            {/* Quick Searches */}
+            <div className="relative z-10 px-4 pt-6 pb-4">
+                <div className="relative group">
+                    {/* Left Arrow */}
                     <button
-                        style={ctaButtonStyle}
-                        onMouseEnter={(e) => {
-                            e.currentTarget.style.transform = 'translateY(-4px)';
-                            e.currentTarget.style.boxShadow = '0 12px 48px rgba(233, 30, 99, 0.6)';
-                        }}
-                        onMouseLeave={(e) => {
-                            e.currentTarget.style.transform = 'translateY(0)';
-                            e.currentTarget.style.boxShadow = '0 8px 32px rgba(233, 30, 99, 0.4)';
-                        }}
+                        onClick={() => handleManualScroll('left')}
+                        className="absolute left-0 top-1/2 -translate-y-1/2 z-20 w-10 h-10 flex items-center justify-center bg-linear-to-r from-zinc-950 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"
                     >
-                        {heroSlides[0].ctaText}
-                    </button>
-                </div>
-            </div>
-
-            {/* Categories Bar */}
-            <div style={sectionStyle}>
-                <div style={{
-                    display: 'flex',
-                    gap: '1rem',
-                    overflowX: 'auto',
-                    paddingBottom: '0.5rem',
-                    marginBottom: '2rem'
-                }}>
-                    {categories.map((cat) => {
-                        const IconComponent = cat.icon;
-                        return (
-                            <button
-                                key={cat.id}
-                                onClick={() => setSelectedCategory(cat.id)}
-                                style={{
-                                    padding: '1rem 1.5rem',
-                                    background: selectedCategory === cat.id ? 'linear-gradient(135deg, #E91E63 0%, #9C27B0 100%)' : 'rgba(255, 255, 255, 0.05)',
-                                    border: selectedCategory === cat.id ? 'none' : '2px solid rgba(255, 255, 255, 0.08)',
-                                    borderRadius: '0.75rem',
-                                    color: '#FFFFFF',
-                                    fontSize: '0.875rem',
-                                    fontWeight: selectedCategory === cat.id ? 600 : 500,
-                                    cursor: 'pointer',
-                                    transition: 'all 0.3s ease',
-                                    whiteSpace: 'nowrap',
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    gap: '0.5rem',
-                                    boxShadow: selectedCategory === cat.id ? '0 4px 16px rgba(233, 30, 99, 0.4)' : 'none'
-                                }}
-                            >
-                                <IconComponent size={18} />
-                                {cat.name}
-                                <span style={{
-                                    padding: '0.125rem 0.5rem',
-                                    background: 'rgba(255, 255, 255, 0.1)',
-                                    borderRadius: '0.25rem',
-                                    fontSize: '0.625rem',
-                                    marginLeft: '0.25rem'
-                                }}>
-                                    {cat.count}
-                                </span>
-                            </button>
-                        );
-                    })}
-                </div>
-
-                {/* Trending Videos */}
-                <div style={sectionHeaderStyle}>
-                    <h2 style={sectionTitleStyle}>
-                        <Flame size={24} style={{ marginRight: '0.5rem' }} />
-                        Video in Tendenza
-                    </h2>
-                    <button style={viewAllButtonStyle}>
-                        Vedi tutti →
-                    </button>
-                </div>
-
-                <div style={gridStyle}>
-                    {trendingVideos.map((video) => (
-                        <VideoCardPlaceholder key={video.id} video={video} />
-                    ))}
-                </div>
-            </div>
-
-            {/* Featured Creators */}
-            <div style={{ ...sectionStyle, background: 'rgba(26, 26, 40, 0.2)' }}>
-                <div style={sectionHeaderStyle}>
-                    <h2 style={sectionTitleStyle}>
-                        <Star size={24} style={{ marginRight: '0.5rem' }} />
-                        Creatori in Evidenza
-                    </h2>
-                    <button style={viewAllButtonStyle}>Scopri tutti →</button>
-                </div>
-
-                <div style={gridStyle}>
-                    {featuredCreators.map((creator) => (
-                        <div
-                            key={creator.id}
-                            style={creatorCardStyle}
-                            onMouseEnter={(e) => {
-                                e.currentTarget.style.transform = 'translateY(-8px)';
-                                e.currentTarget.style.boxShadow = '0 12px 40px rgba(233, 30, 99, 0.3)';
-                                e.currentTarget.style.borderColor = 'rgba(233, 30, 99, 0.3)';
-                            }}
-                            onMouseLeave={(e) => {
-                                e.currentTarget.style.transform = 'translateY(0)';
-                                e.currentTarget.style.boxShadow = 'none';
-                                e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.06)';
-                            }}
-                        >
-                            <img src={creator.avatar} alt={creator.name} style={avatarStyle} />
-                            <h3 style={{ fontSize: '1.25rem', fontWeight: 700, color: '#FFFFFF', marginBottom: '0.5rem' }}>
-                                {creator.name}
-                            </h3>
-                            {creator.isPremium && (
-                                <div style={{
-                                    display: 'inline-block',
-                                    padding: '0.25rem 0.75rem',
-                                    background: 'linear-gradient(135deg, #FFD700 0%, #FFA500 100%)',
-                                    borderRadius: '0.5rem',
-                                    fontSize: '0.625rem',
-                                    fontWeight: 700,
-                                    color: '#0A0A0F',
-                                    textTransform: 'uppercase',
-                                    marginBottom: '0.75rem'
-                                }}>
-                                    VIP Creator
-                                </div>
-                            )}
-                            <p style={{ fontSize: '0.875rem', color: '#B8B8C8', marginBottom: '1rem' }}>
-                                {creator.bio}
-                            </p>
-                            <div style={statsContainerStyle}>
-                                <div style={statStyle}>
-                                    <div style={statValueStyle}>{creator.followers}</div>
-                                    <div style={statLabelStyle}>Followers</div>
-                                </div>
-                                <div style={statStyle}>
-                                    <div style={statValueStyle}>{creator.videos}</div>
-                                    <div style={statLabelStyle}>Videos</div>
-                                </div>
-                            </div>
-                            <button
-                                style={{
-                                    width: '100%',
-                                    marginTop: '1.5rem',
-                                    padding: '0.875rem',
-                                    background: 'linear-gradient(135deg, #E91E63 0%, #9C27B0 100%)',
-                                    color: '#FFFFFF',
-                                    border: 'none',
-                                    borderRadius: '0.75rem',
-                                    fontSize: '0.875rem',
-                                    fontWeight: 600,
-                                    cursor: 'pointer',
-                                    transition: 'all 0.3s ease'
-                                }}
-                                onMouseEnter={(e) => {
-                                    e.currentTarget.style.transform = 'translateY(-2px)';
-                                    e.currentTarget.style.boxShadow = '0 8px 24px rgba(233, 30, 99, 0.5)';
-                                }}
-                                onMouseLeave={(e) => {
-                                    e.currentTarget.style.transform = 'translateY(0)';
-                                    e.currentTarget.style.boxShadow = 'none';
-                                }}
-                            >
-                                Segui
-                            </button>
+                        <div className="w-8 h-8 flex items-center justify-center bg-zinc-800 hover:bg-pink-500/20 border border-zinc-700 hover:border-pink-500 rounded-full transition-all duration-300">
+                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                            </svg>
                         </div>
+                    </button>
+
+                    {/* Scrollable Container */}
+                    <div
+                        ref={searchScrollRef}
+                        className="flex gap-2 overflow-x-hidden scroll-smooth"
+                        onMouseEnter={handleSearchInteraction}
+                        onTouchStart={handleSearchInteraction}
+                    >
+                        {['Luna Rose', 'Exclusive', 'New Today', 'Top Rated', 'Most Viewed', 'Behind Scenes', 'Premium', 'Trending Now', 'VIP Content', 'Latest Releases', 'Fan Favorites', 'Editor\'s Pick'].map((search) => (
+                            <button
+                                key={search}
+                                onClick={handleSearchInteraction}
+                                className="shrink-0 px-4 py-2 bg-linear-to-r from-zinc-800 to-zinc-900 hover:from-pink-500/20 hover:to-purple-500/20 border border-zinc-700/50 hover:border-pink-500/50 rounded-full text-sm font-medium transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-pink-500/20"
+                            >
+                                {search}
+                            </button>
+                        ))}
+                    </div>
+
+                    {/* Right Arrow */}
+                    <button
+                        onClick={() => handleManualScroll('right')}
+                        className="absolute right-0 top-1/2 -translate-y-1/2 z-20 w-10 h-10 flex items-center justify-center bg-linear-to-l from-zinc-950 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                    >
+                        <div className="w-8 h-8 flex items-center justify-center bg-zinc-800 hover:bg-pink-500/20 border border-zinc-700 hover:border-pink-500 rounded-full transition-all duration-300">
+                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                            </svg>
+                        </div>
+                    </button>
+
+                    {/* Gradient fades */}
+                    <div className="absolute left-0 top-0 bottom-0 w-8 bg-linear-to-r from-zinc-950 to-transparent pointer-events-none" />
+                    <div className="absolute right-0 top-0 bottom-0 w-8 bg-linear-to-l from-zinc-950 to-transparent pointer-events-none" />
+                </div>
+            </div>
+
+            {/* Video Grid */}
+            <div className="relative z-10 p-4">
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
+                    {allVideos.map((video) => (
+                        <VideoCard key={video.id} video={video} />
                     ))}
                 </div>
             </div>
 
-            {/* CTA Banner */}
-            <div style={sectionStyle}>
-                <div style={ctaBannerStyle}>
-                    <h2 style={ctaTitleStyle}>
-                        <Crown size={32} style={{ marginRight: '0.5rem', display: 'inline' }} />
-                        Diventa membro VIP oggi
-                    </h2>
-                    <p style={{ fontSize: '1.25rem', color: '#B8B8C8', marginBottom: '2rem', maxWidth: '600px', margin: '0 auto 2rem' }}>
-                        Accedi a contenuti esclusivi, videolezioni premium e molto altro. Unisciti a oltre 100.000 membri VIP.
-                    </p>
-                    <button
-                        style={ctaButtonStyle}
-                        onMouseEnter={(e) => {
-                            e.currentTarget.style.transform = 'translateY(-4px)';
-                            e.currentTarget.style.boxShadow = '0 12px 48px rgba(233, 30, 99, 0.6)';
-                        }}
-                        onMouseLeave={(e) => {
-                            e.currentTarget.style.transform = 'translateY(0)';
-                            e.currentTarget.style.boxShadow = '0 8px 32px rgba(233, 30, 99, 0.4)';
-                        }}
-                    >
-                        Scopri i Piani VIP
-                    </button>
+            {/* Loader */}
+            <div className="flex justify-center py-8">
+                <div className="flex items-center gap-2 px-4 py-2 bg-zinc-900 rounded-full">
+                    <div className="w-2 h-2 bg-pink-500 rounded-full animate-bounce" />
+                    <div className="w-2 h-2 bg-purple-500 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }} />
+                    <div className="w-2 h-2 bg-pink-500 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }} />
+                    <span className="text-sm text-gray-400 ml-2">Loading</span>
                 </div>
             </div>
         </div>

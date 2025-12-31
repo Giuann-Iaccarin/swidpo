@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 
-// VideoPage.jsx - Pagina Video Dettaglio Completa
 const VideoPage = () => {
   const [isLiked, setIsLiked] = useState(false);
   const [isFavorited, setIsFavorited] = useState(false);
